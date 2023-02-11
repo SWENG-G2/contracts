@@ -1,4 +1,4 @@
-package sweng.campusbirdsguide;
+package com.penelope.faunafinder;
 
 import android.content.Context;
 

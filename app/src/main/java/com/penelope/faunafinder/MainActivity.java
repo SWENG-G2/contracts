@@ -1,6 +1,4 @@
-package sweng.campusbirdsguide;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.penelope.faunafinder;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,8 +6,10 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import sweng.campusbirdsguide.presentation.elements.TextElement;
-import sweng.campusbirdsguide.xml.slide.BasicSlide;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.penelope.faunafinder.presentation.elements.TextElement;
+import com.penelope.faunafinder.xml.slide.BasicSlide;
 
 public class MainActivity extends AppCompatActivity {
     // Item identifier
@@ -32,9 +32,11 @@ public class MainActivity extends AppCompatActivity {
         textView.setId(ELEMENT_ID);
         parent.addView(textView);
 
-        TextElement textElement = new TextElement(null, 32, Color.BLACK, 1800, 500, -1);
+        TextElement textElement = new TextElement(null, 32, Color.BLACK, 100, 500, 1800, 25, 5000L);
         textElement.setContent("Test input");
 
         textElement.applyView(parent, (ViewGroup) parent, basicSlide, ELEMENT_ID);
+
+        // The example text element should appear cropped in about half and disappear after 5 seconds
     }
 }

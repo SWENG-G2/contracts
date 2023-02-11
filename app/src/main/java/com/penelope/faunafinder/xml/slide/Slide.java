@@ -1,11 +1,11 @@
-package sweng.campusbirdsguide.xml.slide;
+package com.penelope.faunafinder.xml.slide;
 
 import android.content.Context;
 import android.view.View;
 
-import java.util.List;
+import com.penelope.faunafinder.presentation.elements.PresentationElement;
 
-import sweng.campusbirdsguide.presentation.elements.PresentationElement;
+import java.util.List;
 
 public interface Slide {
     int HORIZONTAL_MARGIN = 10; // 5 DP each side

@@ -1,4 +1,4 @@
-package sweng.campusbirdsguide;
+package com.penelope.faunafinder;
 
 import org.junit.Test;
 
