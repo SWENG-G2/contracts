@@ -1,4 +1,4 @@
-package sweng.campusbirdsguide;
+package com.penelope.faunafinder;
 
 import android.os.Bundle;
 import android.view.ViewGroup;
@@ -7,8 +7,8 @@ import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import sweng.campusbirdsguide.presentation.elements.ImageElement;
-import sweng.campusbirdsguide.xml.slide.BasicSlide;
+import com.penelope.faunafinder.presentation.elements.ImageElement;
+import com.penelope.faunafinder.xml.slide.BasicSlide;
 
 public class MainActivity extends AppCompatActivity {
     // Item identifier
@@ -36,5 +36,8 @@ public class MainActivity extends AppCompatActivity {
                 5L * 1000, 10L * 1000);
 
         imageElement.applyView(parent, (ViewGroup) parent, basicSlide, ELEMENT_ID);
+
+        // The example image element should appear after 5 seconds rotated by -45 degrees.
+        // It should then disappear after 10 seconds.
     }
 }

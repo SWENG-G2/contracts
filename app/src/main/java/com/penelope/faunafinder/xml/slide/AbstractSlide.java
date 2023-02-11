@@ -1,12 +1,12 @@
-package sweng.campusbirdsguide.xml.slide;
+package com.penelope.faunafinder.xml.slide;
 
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
-import java.util.ArrayList;
+import com.penelope.faunafinder.presentation.elements.PresentationElement;
 
-import sweng.campusbirdsguide.presentation.elements.PresentationElement;
+import java.util.ArrayList;
 
 public abstract class AbstractSlide implements Slide {
     protected final DisplayMetrics displayMetrics;

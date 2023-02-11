@@ -1,4 +1,4 @@
-package sweng.campusbirdsguide.presentation.elements;
+package com.penelope.faunafinder.presentation.elements;
 
 import android.content.res.Resources;
 import android.util.DisplayMetrics;

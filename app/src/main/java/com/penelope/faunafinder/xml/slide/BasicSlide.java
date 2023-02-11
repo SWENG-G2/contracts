@@ -1,4 +1,4 @@
-package sweng.campusbirdsguide.xml.slide;
+package com.penelope.faunafinder.xml.slide;
 
 import android.content.Context;
 import android.view.View;
