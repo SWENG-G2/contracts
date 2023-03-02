@@ -1,128 +1,114 @@
 package com.penelope.faunafinder.presentation.elements;
 
-import android.util.Log;
+import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
+
+import com.penelope.faunafinder.R;
 import com.penelope.faunafinder.xml.slide.Slide;
 
 import java.util.Timer;
 import java.util.TimerTask;
-/*
-SORT OUT FONTS
-ApplyVIew XYWH
-*/
+
 
 public class TextElement extends PresentationElement implements ViewElement{
-
-        private String content;
-        private int fontSize;
-        private int width;
-        private int height;
-        private int x;
-        private int y;
-        private long timeOnScreen;
-       // private Color color;
-        private int color;
-        private String font;
-        public TextElement(String font,int fontSize, int color,
+    private String content;
+    private int fontSize;
+    private int width;
+    private int height;
+    private long timeOnScreen;
+    private int color;
+    private String font;
+    public TextElement(String font,int fontSize, int color,
                            int x, int y,int width, int height,
-                           long timeOnScreen){
-          super(x,y);
-          create(x,y,width,height,fontSize,font,color,timeOnScreen);
-        }
-        //Private methods
-        private void create(int x,int y, int width,int height,int fontSize,String font,int color,long timeOnScreen){
-            this.x= x;
-            this.y=y;
-            this.width=width;
-            this.height=height;
-            this.fontSize=fontSize;
-            this.timeOnScreen=timeOnScreen;
-            //Sets FONT
-            if(font!=null) {
-                switch (font) {
-                    case "mono":
-                       this.font= "R.font.chivo_mono_regular";
-                        break;
-                    case "roberto":
-                        this.font= "R.font.roboto_condensed_regular";
-                        break;
-                    default:
-                        this.font= "android.widget.RelativeLayout";
-                        break;
-                }
-            }else{
-                this.font= "R.font.chivo_mono_regular";
+                           long timeOnScreen) {
+        super(x, y);
+        create(width, height, fontSize, font, color, timeOnScreen);
+    }
 
+    //Inherited methods
+    @Override
+    public String getViewType() {
+        return TEXT_ELEMENT;
+    }
+    @Override
+    public String getSearchableContent() {
+        return content.toLowerCase();
+    }
+    @Override
+    public View applyView(View parent, ViewGroup container, Slide slide, int id) {
+        TextView textView = new TextView(parent.getContext());
+        textView.setId(id);
+        container.addView(textView);
+
+        ViewGroup.MarginLayoutParams a = (ViewGroup.MarginLayoutParams) textView.getLayoutParams();
+        ViewGroup.MarginLayoutParams b = setTextViewWHParams(slide, a);
+        ViewGroup.MarginLayoutParams c = setTextViewXYParams(slide, b);
+        textView.setLayoutParams(c);
+
+        setTextViewTimer(textView);
+        setTextViewFontParams(parent, textView);
+        return null;
+    }
+    //Private methods
+    private ViewGroup.MarginLayoutParams setTextViewWHParams(Slide slide, ViewGroup.MarginLayoutParams mlp) {
+        if (width > 0) {
+            mlp.width = Math.round((width * slide.getCalculatedWidth()) / (float) slide.getWidth());
+        } else if (width == -1) {
+            mlp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+        } else if (width == -2) {
+            mlp.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
+        } else {
+            mlp.width = 0; // May need to ask Guiseppe what happens when width/height =! >0 , -1 or -2
+        }
+        if (height > 0) {
+            mlp.height = dpToPx(height);
+        } else if (height == -1) {
+            mlp.height = RelativeLayout.LayoutParams.MATCH_PARENT;
+        } else if (height == -2) {
+            mlp.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+        } else {
+            mlp.height = 0;
+        }
+        return mlp;
+    }
+    private ViewGroup.MarginLayoutParams setTextViewXYParams(Slide slide,ViewGroup.MarginLayoutParams mlp ) {
+        int leftMarg = Math.round((x * slide.getCalculatedWidth()) / (float) slide.getWidth());
+        int rightMarg = leftMarg + mlp.width;
+        int topMarg = dpToPx(y);
+        int bottomMarg = topMarg + mlp.height;
+        mlp.setMargins(leftMarg, topMarg, rightMarg, bottomMarg);
+        return mlp;
+    }
+    private void setTextViewFontParams(View parent, TextView textView) {
+        textView.setText(content);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+        textView.setTextColor(color);
+        Typeface type;
+        if (font != null) {
+            switch (font) {
+                case "mono":
+                    type = ResourcesCompat.getFont(parent.getContext(), R.font.chivo_mono_regular);
+                    break;
+                case "roberto":
+                    type = ResourcesCompat.getFont(parent.getContext(), R.font.roboto_condensed_regular);
+                    break;
+                default:
+                    type = Typeface.DEFAULT;
+                    break;
             }
-            //Set COLOR field to hex value of costructor 'color'
-           // this.color= new Color();
-            //this.color.parseColor(Integer.toHexString(color));
-            this.color=color;
+        } else {
+            type = Typeface.DEFAULT;
         }
-        //Setters and getters
-        public void setContent(String content){
-            this.content= content;
-        }
-
-        @Override
-        public String getViewType() {
-            return TEXT_ELEMENT;
-        }
-
-        @Override
-        public String getSearchableContent() {
-            return content.toLowerCase();
-        }
-
-        @Override
-        public View applyView(View parent, ViewGroup container, Slide slide, int id) {
-            TextView textView = new TextView(parent.getContext());
-            textView.setId(id);
-            container.addView(textView);
-
-            ///ROUGH
-            int nX = Math.round((x * slide.getCalculatedWidth()) / (float) slide.getWidth());
-            int nY = dpToPx(y);
-            Log.d("Elements:", "Initial Y:" + y);
-            Log.d("Elements:", "New Y:" + nY);
-            Log.d("Elements:", "Initial X:" + x);
-            Log.d("Elements:", "New X:" + nX);
-            int nWidth = Math.round((width * slide.getCalculatedWidth()) / (float) slide.getWidth());
-            int nHeight = dpToPx(height);
-
-          //  textView.getLayoutParams().height = nHeight;
-            //textView.getLayoutParams().width = nWidth;
-
-            ViewGroup.MarginLayoutParams mlp= (ViewGroup.MarginLayoutParams)
-                    textView.getLayoutParams();
-            mlp.height=nHeight;
-            mlp.width=nWidth;
-            mlp.setMargins(nX,nY,0,0);
-
-            //textView.setX(nX);
-            //textView.setY(nY);
-            //textView.layout(nX,nY,slide.getWidth()-nWidth,slide.getHeight()-nHeight);
-
-
-
-            Log.d("Elements:", "TextView Width:" + textView.getLayoutParams().width);
-            Log.d("Elements:", "TextView height:" + textView.getLayoutParams().height);
-            Log.d("Elements:", "TextView xPos:" + textView.getX());
-            Log.d("Elements:", "TextView yPos:" + textView.getY());
-
-
-
-
-
-            textView.setText(content);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-            textView.setTextColor(color);
-            textView.setFontFeatureSettings(font);
-
+        textView.setTypeface(type);
+    }
+    private void setTextViewTimer(TextView textView) {
+        if (timeOnScreen != 0) {
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
@@ -130,8 +116,19 @@ public class TextElement extends PresentationElement implements ViewElement{
                     textView.setVisibility(View.INVISIBLE);
                 }
             }, timeOnScreen);
-
-
-            return null;
         }
+    }
+    private void create(int width,int height,int fontSize,String font,int color,long timeOnScreen){
+        this.width=width;
+        this.height=height;
+        this.fontSize=fontSize;
+        this.timeOnScreen=timeOnScreen;
+        this.font=font;
+        this.color=color;
+    }
+
+    //Setters and getters
+    public void setContent(String content){
+        this.content= content;
+    }
     }
