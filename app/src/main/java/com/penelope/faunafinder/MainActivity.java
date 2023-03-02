@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         textElement.setContent("Test input");
 
         textElement.applyView(parent, (ViewGroup) parent, basicSlide, ELEMENT_ID);
-
         // The example text element should appear cropped in about half and disappear after 5 seconds
+
     }
 }
