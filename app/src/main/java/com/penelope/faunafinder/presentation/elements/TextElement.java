@@ -53,7 +53,7 @@ public class TextElement extends PresentationElement implements ViewElement{
 
         setTextViewTimer(textView);
         setTextViewFontParams(parent, textView);
-        return null;
+        return textView;
     }
     //Private methods
     private ViewGroup.MarginLayoutParams setTextViewWHParams(Slide slide, ViewGroup.MarginLayoutParams mlp) {
