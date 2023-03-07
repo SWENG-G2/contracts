@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.penelope.faunafinder.xml.slide.BasicSlide;
@@ -17,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Implements;
 
 import java.util.ArrayList;
 
@@ -24,7 +26,9 @@ import java.util.ArrayList;
 no idea how to get "RelativeLayout parent = findViewById(R.id.activity_main)" in this
  */
 @RunWith(RobolectricTestRunner.class)
+@Implements(ResourcesCompat.class)
 public class TextElementUnitTest{
+
    RelativeLayout parent;
     BasicSlide basicSlide;
 
@@ -111,14 +115,17 @@ public class TextElementUnitTest{
     @Test
     public void fontIsSetCorrectly() throws NoSuchFieldException, IllegalAccessException {
        ArrayList fonts= new ArrayList<String>();
-     //  fonts.add("mono");
-      // fonts.add("roberto");
        fonts.add("null");
+      // fonts.add("mono");
+      // fonts.add("roberto");
 
        ArrayList typefaces= new ArrayList<Typeface>();
-      // typefaces.add(ResourcesCompat.getFont(parent.getContext(), contracts.app.src.main.res.font.chivo_mono_regular));
-       //typefaces.add(androidx.core.content.res.ResourcesCompat.getFont(parent.getContext(), R.font.roboto_condensed_regular));
        typefaces.add(Typeface.DEFAULT);
+       //typefaces.add(ResourcesCompat.getFont(parent.getContext(),font.chivo_mono_regular ));
+       //typefaces.add(ResourcesCompat.getFont(parent.getContext(),font.roboto_condensed_regular));
+    /*
+       its giving a Resources$NotFoundException when these are uncommented
+     */
 
        for(int i=0;i<1;i++){
            TextElement textElement = new TextElement((String)fonts.get(i), 32, Color.BLACK, 100, 500, 1800, 25, 5000L);
@@ -126,16 +133,5 @@ public class TextElementUnitTest{
            View test= textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID);
            Assert.assertEquals(TextView.class.cast(test).getTypeface().toString(),((Typeface)typefaces.get(i)).toString());
        }
-        /*
-        TextElement textElement = new TextElement("mono", 32, Color.BLACK, 100, 500, 1800, 25, 5000L);
-        textElement.setContent("Test input");
-        View test= textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID);
-        //Field textViewField= TextElement.class.getDeclaredField("textView");
-        //textViewField.setAccessible(true);
-      TextView tvTest= TextView.class.cast(test);
-      tvTest.getTypeface()
-       Assert.assertEquals(actual,0); */
-
-
     }
 }
