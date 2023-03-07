@@ -24,6 +24,7 @@ public class TextElement extends PresentationElement implements ViewElement{
     private long timeOnScreen;
     private int color;
     private String font;
+
     public TextElement(String font,int fontSize, int color,
                            int x, int y,int width, int height,
                            long timeOnScreen) {
@@ -57,6 +58,8 @@ public class TextElement extends PresentationElement implements ViewElement{
     }
     //Private methods
     private ViewGroup.MarginLayoutParams setTextViewWHParams(Slide slide, ViewGroup.MarginLayoutParams mlp) {
+        int w= this.width;
+        int h= this.height;
         if (width > 0) {
             mlp.width = Math.round((width * slide.getCalculatedWidth()) / (float) slide.getWidth());
         } else if (width == -1) {
