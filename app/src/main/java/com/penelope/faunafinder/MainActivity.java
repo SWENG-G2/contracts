@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
         imageView.setId(ELEMENT_ID);
         parent.addView(imageView);
 
-        ImageElement imageElement = new ImageElement("url to image",
-                1700, 400, 0, 0, -45,
+        ImageElement imageElement = new ImageElement("https://raw.githubusercontent.com/bumptech/glide/master/static/glide_logo.png",
+                1700, 360, -2, 115, -45,
                 5L * 1000, 10L * 1000);
 
         imageElement.applyView(parent, (ViewGroup) parent, basicSlide, ELEMENT_ID);
