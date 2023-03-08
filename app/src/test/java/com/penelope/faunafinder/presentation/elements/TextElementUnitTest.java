@@ -5,6 +5,7 @@ import static com.penelope.faunafinder.presentation.elements.PresentationElement
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.SystemClock;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +32,10 @@ Tests I need:
 size: width(done), height(done), font size(done), margin params (x and y pos)(done)
 font(done)
 font color(done)
-time on screen
-text on view
+time on screen(not done)
+text on view(done)
+setContent
+
  */
 @RunWith(RobolectricTestRunner.class)
 @Implements(ResourcesCompat.class)
@@ -41,13 +44,13 @@ public class TextElementUnitTest{
    RelativeLayout parent;
     BasicSlide basicSlide;
    int ELEMENT_ID = 8008135;
+    private boolean instance;
 
     @Before
     public void setUpTest() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         parent= new RelativeLayout(appContext);
         basicSlide = new BasicSlide(1920, 500, "Test slide");
-
     }
     @Test
     public void widthIsSetCorrectly(){
@@ -124,15 +127,36 @@ public class TextElementUnitTest{
             Assert.assertEquals(expectedColors.get(i), actualColor);
         }
     }
+   @Test
+   public void yParamsSetCorrectly(){
+       ArrayList testXYPositions= new ArrayList<Integer>();
+       testXYPositions.add(5); //x
+       testXYPositions.add(5); //y
+       testXYPositions.add(2); //x
+       testXYPositions.add(8); //y
+       testXYPositions.add(100); //x
+       testXYPositions.add(200); //y
+
+       for(int i=0;i<testXYPositions.size();i=i+2){
+           TextElement textElement = new TextElement(null, 32, Color.BLACK, (int)testXYPositions.get(i),(int)testXYPositions.get(i+1), 1000, 25, 5000L);
+           textElement.setContent("Test input");
+           TextView testView= TextView.class.cast(textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID));
+           ViewGroup.MarginLayoutParams mlp= (ViewGroup.MarginLayoutParams) testView.getLayoutParams();
+           int actualX= mlp.leftMargin;
+           int actualY= mlp.topMargin;
+           int expectedX=  Math.round((((int)testXYPositions.get(i)) * basicSlide.getCalculatedWidth()) / (float) basicSlide.getWidth());
+           int expectedY= Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int)testXYPositions.get(i+1), displayMetrics));
+           Assert.assertEquals(expectedX, actualX);
+           Assert.assertEquals(expectedY, actualY);
+       }
+   }
     @Test
-    public void xyParamsSetCorrectly(){
-        ArrayList testXYPositions= new ArrayList<Integer>();
-        testXYPositions.add(5); //x
-        testXYPositions.add(5); //y
-        testXYPositions.add(2); //x
-        testXYPositions.add(8); //y
-        testXYPositions.add(100); //x
-        testXYPositions.add(200); //y
+    public void xParamSetCorrectly(){
+        ArrayList testXPositions= new ArrayList<Integer>();
+        testXPositions.add(5); //x
+        testXPositions.add(2); //x
+        testXPositions.add(100); //x
+
 
         for(int i=0;i<testXYPositions.size();i=i+2){
             TextElement textElement = new TextElement(null, 32, Color.BLACK, (int)testXYPositions.get(i),(int)testXYPositions.get(i+1), 1000, 25, 5000L);
@@ -162,4 +186,79 @@ public class TextElementUnitTest{
             Assert.assertEquals(expectedFontSize, actualFontSize);
         }
     }
+    @Test
+    public void textContentIsSetCorrectly(){
+        ArrayList expectedContent= new ArrayList<String>();
+        expectedContent.add("Test Input");
+        expectedContent.add("Greaylag Goose");
+        expectedContent.add("1234567890-=,.<>/?'[]{}|+_)(*&^%$£@!~`§±");
+
+        for(int i=0;i<expectedContent.size();i++){
+            TextElement textElement = new TextElement(null, 32, Color.BLACK, 100,100, 1000, 25, 5000L);
+            textElement.setContent(expectedContent.get(i).toString());
+            TextView testView= TextView.class.cast(textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID));
+            String actualContent= testView.getText().toString();
+            Assert.assertEquals(actualContent, expectedContent.get(i));
+        }
+    }
+    @Test
+    public void timeOnScreenIsSetCorrectly() throws NoSuchFieldException, IllegalAccessException {
+        ArrayList testTimes= new ArrayList<Long>();
+        //testTimes.add(10L);
+      // testTimes.add(100L);
+        testTimes.add(500L);
+
+        for(int i=0;i<testTimes.size();i++){
+            TextElement textElement = new TextElement(null, 32,
+                    Color.BLACK, 100,100, 1000, 25, 500L);
+            textElement.setContent("Test input");
+
+            long beforeApply= SystemClock.elapsedRealtimeNanos();
+            TextView testView= TextView.class.cast(textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID));
+            long afterApply= SystemClock.elapsedRealtimeNanos();
+            long ellapsedTime=0;
+            while(testView.getVisibility()==View.VISIBLE){
+                ellapsedTime=SystemClock.elapsedRealtimeNanos();
+            }
+
+            long actualTime=ellapsedTime-afterApply;
+          //  Assert.assertEquals((long)testTimes.get(i), actualTime);
+        }
+    }
+    @Test
+    public void getViewTypeReturnsCorrect() {
+        TextElement textElement = new TextElement(null, 32,
+                Color.BLACK, 100,100, 1000, 25, 500L);
+        textElement.setContent("Test input");
+        textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID);
+        String actualReturn= textElement.getViewType();
+        String expectedReturn= "text";
+        Assert.assertEquals(expectedReturn,actualReturn);
+    }
+    @Test
+    public void getSearchableContentReturnsCorrect(){
+        TextElement textElement = new TextElement(null, 32,
+                Color.BLACK, 100,100, 1000, 25, 500L);
+        textElement.setContent("TEST INPUT");
+        textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID);
+        String actualReturn= textElement.getSearchableContent();
+        String expectedReturn= "test input";
+        Assert.assertEquals(expectedReturn,actualReturn);
+    }
 }
+
+/*
+ TextView textView = new TextView(parent.getContext());
+ textView.setId(id);
+ container.addView(textView);
+ ViewGroup.MarginLayoutParams a = (ViewGroup.MarginLayoutParams) textView.getLayoutParams();
+a. mlp.width = Math.round((width * slide.getCalculatedWidth()) / (float) slide.getWidth());
+
+ ViewGroup.MarginLayoutParams b = setTextViewWHParams(slide, a);
+ ViewGroup.MarginLayoutParams c = setTextViewXYParams(slide, b);
+ textView.setLayoutParams(c);
+
+        setTextViewTimer(textView);
+        setTextViewFontParams(parent, textView);
+        return textView;
+ */

@@ -51,9 +51,9 @@ public class TextElement extends PresentationElement implements ViewElement{
         ViewGroup.MarginLayoutParams b = setTextViewWHParams(slide, a);
         ViewGroup.MarginLayoutParams c = setTextViewXYParams(slide, b);
         textView.setLayoutParams(c);
-
+         setTextViewFontParams(parent, textView);
         setTextViewTimer(textView);
-        setTextViewFontParams(parent, textView);
+
         return textView;
     }
     //Private methods
