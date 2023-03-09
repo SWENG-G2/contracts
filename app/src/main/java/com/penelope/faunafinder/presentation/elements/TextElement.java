@@ -31,12 +31,7 @@ public class TextElement extends PresentationElement implements ViewElement{
                            int x, int y,int width, int height,
                            long timeOnScreen) {
         super(x, y);
-        this.font=font;
-        this.fontSize=fontSize;
-        this.color=color;
-        this.width=width;
-        this.height=height;
-        this.timeOnScreen=timeOnScreen;
+       create(font,fontSize,color,width,height,timeOnScreen);
     }
 
     //Inherited methods
@@ -129,6 +124,31 @@ public class TextElement extends PresentationElement implements ViewElement{
         }
     }
 
+   private void create(String font,int fontSize,int color,int width,
+                       int height,long timeOnScreen ){
+
+       if(((width<-2)||(width==0))||((height<-2)||(height==0))){
+           IllegalArgumentException e= new IllegalArgumentException
+                   ("Error: width and height parameters are invalid");
+           e.printStackTrace();
+           throw e;
+       }else{
+           this.width=width;
+           this.height=height;
+       }
+       if(fontSize<=0){
+
+           IllegalArgumentException e= new IllegalArgumentException
+                   ("Error: Fontsize must be a positive integer");
+          e.printStackTrace();
+          throw e;
+       }else{
+           this.fontSize=fontSize;
+       }
+       this.color=color;
+       this.font=font;
+       this.timeOnScreen=timeOnScreen;
+   }
     //Setters and getters
     public void setContent(String content){
         this.content= content;
