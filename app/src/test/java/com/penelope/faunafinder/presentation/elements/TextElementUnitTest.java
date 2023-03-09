@@ -5,7 +5,6 @@ import static com.penelope.faunafinder.presentation.elements.PresentationElement
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.SystemClock;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +43,6 @@ public class TextElementUnitTest{
    RelativeLayout parent;
     BasicSlide basicSlide;
    int ELEMENT_ID = 8008135;
-    private boolean instance;
 
     @Before
     public void setUpTest() {
@@ -129,46 +127,38 @@ public class TextElementUnitTest{
     }
    @Test
    public void yParamsSetCorrectly(){
-       ArrayList testXYPositions= new ArrayList<Integer>();
-       testXYPositions.add(5); //x
-       testXYPositions.add(5); //y
-       testXYPositions.add(2); //x
-       testXYPositions.add(8); //y
-       testXYPositions.add(100); //x
-       testXYPositions.add(200); //y
+        int x= 200;
+       ArrayList testYPositions= new ArrayList<Integer>();
+       testYPositions.add(5); //x
+       testYPositions.add(10); //y
+       testYPositions.add(300); //x
 
-       for(int i=0;i<testXYPositions.size();i=i+2){
-           TextElement textElement = new TextElement(null, 32, Color.BLACK, (int)testXYPositions.get(i),(int)testXYPositions.get(i+1), 1000, 25, 5000L);
+       for(int i=0;i<testYPositions.size();i++){
+           TextElement textElement = new TextElement(null, 32, Color.BLACK, x,(int)testYPositions.get(i), 1000, 25, 5000L);
            textElement.setContent("Test input");
            TextView testView= TextView.class.cast(textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID));
            ViewGroup.MarginLayoutParams mlp= (ViewGroup.MarginLayoutParams) testView.getLayoutParams();
-           int actualX= mlp.leftMargin;
            int actualY= mlp.topMargin;
-           int expectedX=  Math.round((((int)testXYPositions.get(i)) * basicSlide.getCalculatedWidth()) / (float) basicSlide.getWidth());
-           int expectedY= Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int)testXYPositions.get(i+1), displayMetrics));
-           Assert.assertEquals(expectedX, actualX);
+           int expectedY= Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int)testYPositions.get(i), displayMetrics));
            Assert.assertEquals(expectedY, actualY);
        }
    }
     @Test
     public void xParamSetCorrectly(){
+        int y= 200;
         ArrayList testXPositions= new ArrayList<Integer>();
         testXPositions.add(5); //x
         testXPositions.add(2); //x
         testXPositions.add(100); //x
 
-
-        for(int i=0;i<testXYPositions.size();i=i+2){
-            TextElement textElement = new TextElement(null, 32, Color.BLACK, (int)testXYPositions.get(i),(int)testXYPositions.get(i+1), 1000, 25, 5000L);
+        for(int i=0;i<testXPositions.size();i++){
+            TextElement textElement = new TextElement(null, 32, Color.BLACK, (int)testXPositions.get(i),y, 1000, 25, 5000L);
             textElement.setContent("Test input");
             TextView testView= TextView.class.cast(textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID));
             ViewGroup.MarginLayoutParams mlp= (ViewGroup.MarginLayoutParams) testView.getLayoutParams();
             int actualX= mlp.leftMargin;
-            int actualY= mlp.topMargin;
-            int expectedX=  Math.round((((int)testXYPositions.get(i)) * basicSlide.getCalculatedWidth()) / (float) basicSlide.getWidth());
-            int expectedY= Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int)testXYPositions.get(i+1), displayMetrics));
+            int expectedX=  Math.round((((int)testXPositions.get(i)) * basicSlide.getCalculatedWidth()) / (float) basicSlide.getWidth());
             Assert.assertEquals(expectedX, actualX);
-            Assert.assertEquals(expectedY, actualY);
         }
     }
     @Test
@@ -202,27 +192,25 @@ public class TextElementUnitTest{
         }
     }
     @Test
-    public void timeOnScreenIsSetCorrectly() throws NoSuchFieldException, IllegalAccessException {
+    public void timeOnScreenIsSetCorrectly(){
         ArrayList testTimes= new ArrayList<Long>();
-        //testTimes.add(10L);
-      // testTimes.add(100L);
+        testTimes.add(10L);
+        testTimes.add(100L);
         testTimes.add(500L);
 
-        for(int i=0;i<testTimes.size();i++){
+        for(int i=0;i<testTimes.size();i++) {
             TextElement textElement = new TextElement(null, 32,
-                    Color.BLACK, 100,100, 1000, 25, 500L);
+                    Color.BLACK, 100, 100, 1000, 25, (Long)testTimes.get(i));
             textElement.setContent("Test input");
-
-            long beforeApply= SystemClock.elapsedRealtimeNanos();
-            TextView testView= TextView.class.cast(textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID));
-            long afterApply= SystemClock.elapsedRealtimeNanos();
-            long ellapsedTime=0;
-            while(testView.getVisibility()==View.VISIBLE){
-                ellapsedTime=SystemClock.elapsedRealtimeNanos();
+            View testView= textElement.applyView(parent,(ViewGroup) parent, basicSlide,ELEMENT_ID);
+            long b= System.currentTimeMillis();
+            while(testView.getVisibility()==0){
+                //System.out.println("A");
             }
-
-            long actualTime=ellapsedTime-afterApply;
-          //  Assert.assertEquals((long)testTimes.get(i), actualTime);
+            long c= System.currentTimeMillis();
+            long actualTimeDelta= c-b;
+            long delta= 5; // +5ms for testView to be returned
+            Assert.assertEquals((long )testTimes.get(i),actualTimeDelta,delta);
         }
     }
     @Test
@@ -247,18 +235,3 @@ public class TextElementUnitTest{
     }
 }
 
-/*
- TextView textView = new TextView(parent.getContext());
- textView.setId(id);
- container.addView(textView);
- ViewGroup.MarginLayoutParams a = (ViewGroup.MarginLayoutParams) textView.getLayoutParams();
-a. mlp.width = Math.round((width * slide.getCalculatedWidth()) / (float) slide.getWidth());
-
- ViewGroup.MarginLayoutParams b = setTextViewWHParams(slide, a);
- ViewGroup.MarginLayoutParams c = setTextViewXYParams(slide, b);
- textView.setLayoutParams(c);
-
-        setTextViewTimer(textView);
-        setTextViewFontParams(parent, textView);
-        return textView;
- */
