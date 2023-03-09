@@ -100,7 +100,7 @@ public class TextElement extends PresentationElement implements ViewElement{
                 case "mono":
                     type = ResourcesCompat.getFont(parent.getContext(), R.font.chivo_mono_regular);
                     break;
-                case "roberto":
+                case "roboto":
                     type = ResourcesCompat.getFont(parent.getContext(), R.font.roboto_condensed_regular);
                     break;
                 default:

@@ -81,7 +81,7 @@ public class TextElementUnitTest{
        ArrayList fonts= new ArrayList<String>();
        fonts.add("null");
        fonts.add("mono");
-       fonts.add("roberto");
+       fonts.add("roboto");
 
        ArrayList typefaces= new ArrayList<Typeface>();
        typefaces.add(Typeface.DEFAULT);
