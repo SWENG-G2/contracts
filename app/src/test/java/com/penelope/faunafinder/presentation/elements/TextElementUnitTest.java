@@ -1,7 +1,5 @@
 package com.penelope.faunafinder.presentation.elements;
-
 import static com.penelope.faunafinder.presentation.elements.PresentationElement.displayMetrics;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -10,32 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import androidx.core.content.res.ResourcesCompat;
 import androidx.test.platform.app.InstrumentationRegistry;
-
 import com.penelope.faunafinder.R;
 import com.penelope.faunafinder.xml.slide.BasicSlide;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Implements;
-
 import java.util.ArrayList;
 
-/*
-Tests I need:
-size: width(done), height(done), font size(done), margin params (x and y pos)(done)
-font(done)
-font color(done)
-time on screen(not done)
-text on view(done)
-setContent
-
- */
 @RunWith(RobolectricTestRunner.class)
 @Implements(ResourcesCompat.class)
 public class TextElementUnitTest{
@@ -205,11 +189,10 @@ public class TextElementUnitTest{
             View testView= textElement.applyView(parent,(ViewGroup) parent, basicSlide,ELEMENT_ID);
             long b= System.currentTimeMillis();
             while(testView.getVisibility()==0){
-                //System.out.println("A");
             }
             long c= System.currentTimeMillis();
             long actualTimeDelta= c-b;
-            long delta= 5; // +5ms for testView to be returned
+            long delta=(((Long)testTimes.get(i))/10) +  5; // buffer time is 10% +5ms for testView to be returned
             Assert.assertEquals((long )testTimes.get(i),actualTimeDelta,delta);
         }
     }

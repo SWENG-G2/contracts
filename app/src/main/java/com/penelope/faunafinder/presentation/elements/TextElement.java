@@ -1,6 +1,8 @@
 package com.penelope.faunafinder.presentation.elements;
 
 import android.graphics.Typeface;
+import android.graphics.text.LineBreaker;
+import android.os.Build;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +31,12 @@ public class TextElement extends PresentationElement implements ViewElement{
                            int x, int y,int width, int height,
                            long timeOnScreen) {
         super(x, y);
-        create(width, height, fontSize, font, color, timeOnScreen);
+        this.font=font;
+        this.fontSize=fontSize;
+        this.color=color;
+        this.width=width;
+        this.height=height;
+        this.timeOnScreen=timeOnScreen;
     }
 
     //Inherited methods
@@ -46,14 +53,11 @@ public class TextElement extends PresentationElement implements ViewElement{
         TextView textView = new TextView(parent.getContext());
         textView.setId(id);
         container.addView(textView);
-
-        ViewGroup.MarginLayoutParams a = (ViewGroup.MarginLayoutParams) textView.getLayoutParams();
-        ViewGroup.MarginLayoutParams b = setTextViewWHParams(slide, a);
-        ViewGroup.MarginLayoutParams c = setTextViewXYParams(slide, b);
-        textView.setLayoutParams(c);
-         setTextViewFontParams(parent, textView);
+        ViewGroup.MarginLayoutParams mlp= (ViewGroup.MarginLayoutParams) textView.getLayoutParams();
+        setTextViewWHParams(slide,mlp);
+        setTextViewXYParams(slide,mlp);
+        setTextViewFontParams(parent, textView);
         setTextViewTimer(textView);
-
         return textView;
     }
     //Private methods
@@ -90,6 +94,9 @@ public class TextElement extends PresentationElement implements ViewElement{
     }
     private void setTextViewFontParams(View parent, TextView textView) {
         textView.setText(content);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+           textView.setJustificationMode(LineBreaker.JUSTIFICATION_MODE_INTER_WORD);
+        }
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
         textView.setTextColor(color);
         Typeface type;
@@ -120,14 +127,6 @@ public class TextElement extends PresentationElement implements ViewElement{
                 }
             }, timeOnScreen);
         }
-    }
-    private void create(int width,int height,int fontSize,String font,int color,long timeOnScreen){
-        this.width=width;
-        this.height=height;
-        this.fontSize=fontSize;
-        this.timeOnScreen=timeOnScreen;
-        this.font=font;
-        this.color=color;
     }
 
     //Setters and getters
