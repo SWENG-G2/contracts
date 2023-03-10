@@ -6,6 +6,7 @@ import android.os.Build;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -45,9 +46,7 @@ public class TextElement extends PresentationElement implements ViewElement{
     }
     @Override
     public View applyView(View parent, ViewGroup container, Slide slide, int id) {
-        TextView textView = new TextView(parent.getContext());
-        textView.setId(id);
-        container.addView(textView);
+        TextView textView = (TextView) parent.findViewById(id);
         ViewGroup.MarginLayoutParams mlp= (ViewGroup.MarginLayoutParams) textView.getLayoutParams();
         setTextViewWHParams(slide,mlp);
         setTextViewXYParams(slide,mlp);
@@ -111,14 +110,9 @@ public class TextElement extends PresentationElement implements ViewElement{
         textView.setTypeface(type);
     }
     private void setTextViewTimer(TextView textView) {
+        textView.setVisibility(View.VISIBLE);
         if (timeOnScreen != 0) {
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    textView.setVisibility(View.INVISIBLE);
-                }
-            }, timeOnScreen);
+            textView.postDelayed(() -> textView.setVisibility(View.INVISIBLE), timeOnScreen);
         }
     }
 

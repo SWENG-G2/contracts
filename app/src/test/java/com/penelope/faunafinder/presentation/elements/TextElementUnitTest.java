@@ -1,5 +1,9 @@
 package com.penelope.faunafinder.presentation.elements;
 import static com.penelope.faunafinder.presentation.elements.PresentationElement.displayMetrics;
+
+import static org.junit.Assert.assertEquals;
+
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -16,9 +20,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Implements;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 @RunWith(RobolectricTestRunner.class)
 @Implements(ResourcesCompat.class)
@@ -32,17 +38,22 @@ public class TextElementUnitTest{
     public void setUpTest() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         parent= new RelativeLayout(appContext);
+        Activity activity = Robolectric.setupActivity(Activity.class);
+        activity.setContentView(parent);
         basicSlide = new BasicSlide(1920, 500, "Test slide");
+        TextView textView = new TextView(parent.getContext());
+        textView.setId(ELEMENT_ID);
+        parent.addView(textView);
     }
     @Test
     public void widthIsSetCorrectly(){
        int height= 100;
-       ArrayList testWidths= new ArrayList<Integer>();
+       ArrayList<Integer> testWidths = new ArrayList<Integer>();
        testWidths.add(100);
        testWidths.add(-1);
        testWidths.add(-2);
 
-        ArrayList expectedWidths= new ArrayList<Integer>();
+        ArrayList<Integer> expectedWidths= new ArrayList<Integer>();
         expectedWidths.add(Math.round(100* basicSlide.getCalculatedWidth()/(float) basicSlide.getWidth()));
         expectedWidths.add(RelativeLayout.LayoutParams.MATCH_PARENT);
         expectedWidths.add(RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -50,20 +61,21 @@ public class TextElementUnitTest{
         for(int i=0;i<3;i++){
             TextElement textElement = new TextElement(null, 32, Color.BLACK, 100, 500, (int)testWidths.get(i), height, 5000L);
             textElement.setContent("Test input");
-            View testView= textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID);
+            View testView = textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID);
             int actualWidth= testView.getLayoutParams().width;
-            Assert.assertEquals(expectedWidths.get(i), actualWidth);
+            int expected = expectedWidths.get(i);
+            assertEquals(expected, actualWidth);
         }
     }
     @Test
     public void heightIsSetCorrectly(){
         int width= 100;
-        ArrayList testHeights= new ArrayList<Integer>();
+        ArrayList<Integer> testHeights= new ArrayList<Integer>();
         testHeights.add(100);
         testHeights.add(-1);
         testHeights.add(-2);
 
-        ArrayList expectedHeights= new ArrayList<Integer>();
+        ArrayList<Integer> expectedHeights= new ArrayList<Integer>();
         expectedHeights.add(Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, displayMetrics)));
         expectedHeights.add(RelativeLayout.LayoutParams.MATCH_PARENT);
         expectedHeights.add(RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -73,17 +85,18 @@ public class TextElementUnitTest{
             textElement.setContent("Test input");
             View testView= textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID);
             int actualHeight= testView.getLayoutParams().height;
-            Assert.assertEquals(expectedHeights.get(i), actualHeight);
+            int expected = expectedHeights.get(i);
+            assertEquals(expected, actualHeight);
         }
     }
     @Test
     public void fontIsSetCorrectly() {
-       ArrayList fonts= new ArrayList<String>();
+       ArrayList<String> fonts= new ArrayList<String>();
        fonts.add("null");
        fonts.add("mono");
        fonts.add("roboto");
 
-       ArrayList typefaces= new ArrayList<Typeface>();
+       ArrayList<Typeface> typefaces= new ArrayList<Typeface>();
        typefaces.add(Typeface.DEFAULT);
        typefaces.add(ResourcesCompat.getFont(parent.getContext(), R.font.chivo_mono_regular));
        typefaces.add(ResourcesCompat.getFont(parent.getContext(),  R.font.chivo_mono_regular));
@@ -92,7 +105,7 @@ public class TextElementUnitTest{
            TextElement textElement = new TextElement((String)fonts.get(i), 32, Color.BLACK, 100, 500, 1800, 25, 5000L);
            textElement.setContent("Test input");
            View test= textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID);
-           Assert.assertEquals(TextView.class.cast(test).getTypeface().toString(),((Typeface)typefaces.get(i)).toString());
+           assertEquals(TextView.class.cast(test).getTypeface().toString(),((Typeface)typefaces.get(i)).toString());
        }
     }
     @Test
@@ -106,7 +119,7 @@ public class TextElementUnitTest{
             textElement.setContent("Test input");
             TextView testView= TextView.class.cast(textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID));
             int actualColor= testView.getCurrentTextColor();
-            Assert.assertEquals(expectedColors.get(i), actualColor);
+            assertEquals(expectedColors.get(i), actualColor);
         }
     }
    @Test
@@ -124,7 +137,7 @@ public class TextElementUnitTest{
            ViewGroup.MarginLayoutParams mlp= (ViewGroup.MarginLayoutParams) testView.getLayoutParams();
            int actualY= mlp.topMargin;
            int expectedY= Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (int)testYPositions.get(i), displayMetrics));
-           Assert.assertEquals(expectedY, actualY);
+           assertEquals(expectedY, actualY);
        }
    }
     @Test
@@ -142,7 +155,7 @@ public class TextElementUnitTest{
             ViewGroup.MarginLayoutParams mlp= (ViewGroup.MarginLayoutParams) testView.getLayoutParams();
             int actualX= mlp.leftMargin;
             int expectedX=  Math.round((((int)testXPositions.get(i)) * basicSlide.getCalculatedWidth()) / (float) basicSlide.getWidth());
-            Assert.assertEquals(expectedX, actualX);
+            assertEquals(expectedX, actualX);
         }
     }
     @Test
@@ -157,7 +170,7 @@ public class TextElementUnitTest{
             TextView testView = TextView.class.cast(textElement.applyView(parent, (ViewGroup) parent, basicSlide, ELEMENT_ID));
             int expectedFontSize = View.getDefaultSize((int) testFontSizes.get(i), TypedValue.COMPLEX_UNIT_SP);
             int actualFontSize = Math.round(testView.getTextSize());
-            Assert.assertEquals(expectedFontSize, actualFontSize);
+            assertEquals(expectedFontSize, actualFontSize);
         }
     }
     @Test
@@ -172,12 +185,12 @@ public class TextElementUnitTest{
             textElement.setContent(expectedContent.get(i).toString());
             TextView testView= TextView.class.cast(textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID));
             String actualContent= testView.getText().toString();
-            Assert.assertEquals(actualContent, expectedContent.get(i));
+            assertEquals(actualContent, expectedContent.get(i));
         }
     }
     @Test
     public void timeOnScreenIsSetCorrectly(){
-        ArrayList testTimes= new ArrayList<Long>();
+        ArrayList<Long> testTimes= new ArrayList<Long>();
         testTimes.add(10L);
         testTimes.add(100L);
         testTimes.add(500L);
@@ -188,13 +201,9 @@ public class TextElementUnitTest{
                     Color.BLACK, 100, 100, 1000, 25, (Long)testTimes.get(i));
             textElement.setContent("Test input");
             View testView= textElement.applyView(parent,(ViewGroup) parent, basicSlide,ELEMENT_ID);
-            long timeAfterApply= System.currentTimeMillis();
-            while(testView.getVisibility()==0){
-            }
-            long timeViewGoesInvisible= System.currentTimeMillis();
-            long actualTimeDelta= timeViewGoesInvisible-timeAfterApply;
-            long delta=(((Long)testTimes.get(i))/10) +  5; // buffer time is 10% +5ms for testView to be returned
-            Assert.assertEquals((long )testTimes.get(i),actualTimeDelta,delta);
+            assertEquals(View.VISIBLE, testView.getVisibility());
+            Robolectric.getForegroundThreadScheduler().advanceBy(testTimes.get(i), TimeUnit.MILLISECONDS);
+            assertEquals(View.INVISIBLE, testView.getVisibility());
         }
     }
     @Test
@@ -205,7 +214,7 @@ public class TextElementUnitTest{
         textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID);
         String actualReturn= textElement.getViewType();
         String expectedReturn= "text";
-        Assert.assertEquals(expectedReturn,actualReturn);
+        assertEquals(expectedReturn,actualReturn);
     }
     @Test
     public void getSearchableContentReturnsCorrect(){
@@ -215,7 +224,7 @@ public class TextElementUnitTest{
         textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID);
         String actualReturn= textElement.getSearchableContent();
         String expectedReturn= "test input";
-        Assert.assertEquals(expectedReturn,actualReturn);
+        assertEquals(expectedReturn,actualReturn);
     }
 }
 
