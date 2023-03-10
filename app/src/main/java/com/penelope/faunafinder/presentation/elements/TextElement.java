@@ -56,7 +56,7 @@ public class TextElement extends PresentationElement implements ViewElement{
         return textView;
     }
     //Private methods
-    private ViewGroup.MarginLayoutParams setTextViewWHParams(Slide slide, ViewGroup.MarginLayoutParams mlp) {
+    private void setTextViewWHParams(Slide slide, ViewGroup.MarginLayoutParams mlp) {
         int w= this.width;
         int h= this.height;
         if (width > 0) {
@@ -77,15 +77,13 @@ public class TextElement extends PresentationElement implements ViewElement{
         } else {
             mlp.height = 0;
         }
-        return mlp;
     }
-    private ViewGroup.MarginLayoutParams setTextViewXYParams(Slide slide,ViewGroup.MarginLayoutParams mlp ) {
+    private void setTextViewXYParams(Slide slide,ViewGroup.MarginLayoutParams mlp ) {
         int leftMarg = Math.round((x * slide.getCalculatedWidth()) / (float) slide.getWidth());
         int rightMarg = leftMarg + mlp.width;
         int topMarg = dpToPx(y);
         int bottomMarg = topMarg + mlp.height;
         mlp.setMargins(leftMarg, topMarg, rightMarg, bottomMarg);
-        return mlp;
     }
     private void setTextViewFontParams(View parent, TextView textView) {
         textView.setText(content);

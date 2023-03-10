@@ -187,11 +187,11 @@ public class TextElementUnitTest{
                     Color.BLACK, 100, 100, 1000, 25, (Long)testTimes.get(i));
             textElement.setContent("Test input");
             View testView= textElement.applyView(parent,(ViewGroup) parent, basicSlide,ELEMENT_ID);
-            long b= System.currentTimeMillis();
+            long timeAfterApply= System.currentTimeMillis();
             while(testView.getVisibility()==0){
             }
-            long c= System.currentTimeMillis();
-            long actualTimeDelta= c-b;
+            long timeViewGoesInvisible= System.currentTimeMillis();
+            long actualTimeDelta= timeViewGoesInvisible-timeAfterApply;
             long delta=(((Long)testTimes.get(i))/10) +  5; // buffer time is 10% +5ms for testView to be returned
             Assert.assertEquals((long )testTimes.get(i),actualTimeDelta,delta);
         }
