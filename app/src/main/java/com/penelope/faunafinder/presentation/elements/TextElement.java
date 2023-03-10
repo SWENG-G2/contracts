@@ -6,7 +6,6 @@ import android.os.Build;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,8 +14,6 @@ import androidx.core.content.res.ResourcesCompat;
 import com.penelope.faunafinder.R;
 import com.penelope.faunafinder.xml.slide.Slide;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class TextElement extends PresentationElement implements ViewElement{
@@ -56,8 +53,6 @@ public class TextElement extends PresentationElement implements ViewElement{
     }
     //Private methods
     private void setTextViewWHParams(Slide slide, ViewGroup.MarginLayoutParams mlp) {
-        int w= this.width;
-        int h= this.height;
         if (width > 0) {
             mlp.width = Math.round((width * slide.getCalculatedWidth()) / (float) slide.getWidth());
         } else if (width == -1) {
