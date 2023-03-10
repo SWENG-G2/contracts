@@ -1,50 +1,30 @@
 package com.penelope.faunafinder.presentation.elements;
 
-import static android.os.Looper.getMainLooper;
-import static com.penelope.faunafinder.presentation.elements.PresentationElement.ALIGN_CENTER_OF_PARENT;
 import static com.penelope.faunafinder.presentation.elements.PresentationElement.IMAGE_ELEMENT;
 import static com.penelope.faunafinder.presentation.elements.PresentationElement.displayMetrics;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.robolectric.Shadows.shadowOf;
+import static org.junit.Assert.assertNull;
 
 import android.app.Activity;
 import android.content.Context;
-import android.media.Image;
-import android.os.Looper;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.penelope.faunafinder.MainActivity;
 import com.penelope.faunafinder.xml.slide.BasicSlide;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowApplication;
-import org.robolectric.shadows.ShadowLooper;
-import org.robolectric.shadows.ShadowSystemClock;
-import org.robolectric.util.Scheduler;
 
-import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @RunWith(RobolectricTestRunner.class)
@@ -54,8 +34,6 @@ public class ImageElementTest {
     private static final String URL = "https://raw.githubusercontent.com/bumptech/glide/master/static/glide_logo.png";
     private RelativeLayout parent;
     private BasicSlide basicSlide;
-
-    private Activity activity;
 
     @Before
     public void setup(){
@@ -91,7 +69,7 @@ public class ImageElementTest {
                 0,
                 0);
 
-        assertEquals(null, ie.getSearchableContent());
+        assertNull(ie.getSearchableContent());
     }
 
     @Test
@@ -114,11 +92,11 @@ public class ImageElementTest {
         int x = 0;
         int y = 0;
 
-        ArrayList<Integer> testHeights= new ArrayList<Integer>();
+        ArrayList<Integer> testHeights= new ArrayList<>();
         testHeights.add(1000);
         testHeights.add(-1);
 
-        ArrayList<Integer> expectedHeights= new ArrayList<Integer>();
+        ArrayList<Integer> expectedHeights= new ArrayList<>();
         expectedHeights.add(Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1000, displayMetrics)));
         expectedHeights.add(Math.round((width * basicSlide.getCalculatedWidth()) / (float) basicSlide.getWidth()));
 
@@ -180,12 +158,12 @@ public class ImageElementTest {
     @Test
     public void applyViewWidthTest(){
         int height= 100;
-        ArrayList<Integer> testWidths= new ArrayList<Integer>();
+        ArrayList<Integer> testWidths= new ArrayList<>();
         testWidths.add(100);
         testWidths.add(300);
         testWidths.add(1000);
 
-        ArrayList<Integer> expectedWidths= new ArrayList<Integer>();
+        ArrayList<Integer> expectedWidths= new ArrayList<>();
         expectedWidths.add(Math.round(100* basicSlide.getCalculatedWidth()/(float) basicSlide.getWidth()));
         expectedWidths.add(Math.round(300* basicSlide.getCalculatedWidth()/(float) basicSlide.getWidth()));
         expectedWidths.add(Math.round(1000* basicSlide.getCalculatedWidth()/(float) basicSlide.getWidth()));
@@ -193,7 +171,7 @@ public class ImageElementTest {
         for(int i=0;i<3;i++){
             ImageElement ie = new ImageElement(URL,
                     testWidths.get(i),
-                    100,
+                    height,
                     0, 0,
                     0,
                     0,
@@ -249,14 +227,13 @@ public class ImageElementTest {
     public void applyViewRuleTest(){
         int y = 0, rot = 0, del = 0, timeOnScreen = 0;
         int width = 100, height = 100;
-        int x = ALIGN_CENTER_OF_PARENT;
 
-        ArrayList<Integer> inputX = new ArrayList<Integer>();
+        ArrayList<Integer> inputX = new ArrayList<>();
         inputX.add(0);
         inputX.add(-3);
         inputX.add(-2);
 
-        ArrayList<Integer> expectedRule = new ArrayList<Integer>();
+        ArrayList<Integer> expectedRule = new ArrayList<>();
         expectedRule.add(0);
         expectedRule.add(RelativeLayout.ALIGN_PARENT_RIGHT);
         expectedRule.add(RelativeLayout.CENTER_HORIZONTAL);

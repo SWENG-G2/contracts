@@ -1,7 +1,5 @@
 package com.penelope.faunafinder.presentation.elements;
 
-import android.os.Handler;
-import android.util.Patterns;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
