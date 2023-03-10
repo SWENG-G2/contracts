@@ -181,6 +181,7 @@ public class TextElementUnitTest{
         testTimes.add(10L);
         testTimes.add(100L);
         testTimes.add(500L);
+        testTimes.add(5000L);
 
         for(int i=0;i<testTimes.size();i++) {
             TextElement textElement = new TextElement(null, 32,
