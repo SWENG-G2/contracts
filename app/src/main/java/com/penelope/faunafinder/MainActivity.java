@@ -32,10 +32,10 @@ public class MainActivity extends AppCompatActivity {
         parent.addView(imageView);
 
         ImageElement imageElement = new ImageElement("https://raw.githubusercontent.com/bumptech/glide/master/static/glide_logo.png",
-                1700, 360, -2, 115, -45,
-                5L * 1000, 10L * 1000);
+                1700, 360, -2, 115, 45,
+                1000, 5000);
 
-        imageElement.applyView(parent, (ViewGroup) parent, basicSlide, ELEMENT_ID);
+        ImageView iv = (ImageView) imageElement.applyView(parent, (ViewGroup) parent, basicSlide, ELEMENT_ID);
 
         // The example image element should appear after 5 seconds rotated by -45 degrees.
         // It should then disappear after 10 seconds.
