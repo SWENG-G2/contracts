@@ -97,7 +97,7 @@ public class TextElement extends PresentationElement implements ViewElement{
     }
     private void setTextViewTimer(TextView textView) {
         textView.setVisibility(View.VISIBLE);
-        if (timeOnScreen != 0) {
+        if (timeOnScreen != -1) {
             textView.postDelayed(() -> textView.setVisibility(View.INVISIBLE), timeOnScreen);
         }
     }
