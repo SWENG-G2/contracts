@@ -29,7 +29,7 @@ public class TextElement extends PresentationElement implements ViewElement{
                            int x, int y,int width, int height,
                            long timeOnScreen) {
         super(x, y);
-       create(font,fontSize,color,width,height,timeOnScreen);
+        create(font,fontSize,color,width,height,timeOnScreen);
     }
 
     //Inherited methods
@@ -55,29 +55,25 @@ public class TextElement extends PresentationElement implements ViewElement{
     private void setTextViewWHParams(Slide slide, ViewGroup.MarginLayoutParams mlp) {
         if (width > 0) {
             mlp.width = Math.round((width * slide.getCalculatedWidth()) / (float) slide.getWidth());
-        } else if (width == -1) {
+        } else if (width == MATCH_PARENT) {
             mlp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
-        } else if (width == -2) {
-            mlp.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
         } else {
-            mlp.width = 0; // May need to ask Guiseppe what happens when width/height =! >0 , -1 or -2
+            mlp.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
         }
+
         if (height > 0) {
             mlp.height = dpToPx(height);
-        } else if (height == -1) {
+        } else if (height == MATCH_PARENT) {
             mlp.height = RelativeLayout.LayoutParams.MATCH_PARENT;
-        } else if (height == -2) {
-            mlp.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
         } else {
-            mlp.height = 0;
+            mlp.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
         }
     }
     private void setTextViewXYParams(Slide slide,ViewGroup.MarginLayoutParams mlp ) {
         int leftMarg = Math.round((x * slide.getCalculatedWidth()) / (float) slide.getWidth());
-        int rightMarg = leftMarg + mlp.width;
         int topMarg = dpToPx(y);
-        int bottomMarg = topMarg + mlp.height;
-        mlp.setMargins(leftMarg, topMarg, rightMarg, bottomMarg);
+        mlp.leftMargin = leftMarg;
+        mlp.topMargin = topMarg;
     }
     private void setTextViewFontParams(View parent, TextView textView) {
         textView.setText(content);
@@ -86,23 +82,18 @@ public class TextElement extends PresentationElement implements ViewElement{
         }
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
         textView.setTextColor(color);
-        Typeface type;
         if (font != null) {
-            switch (font) {
-                case "mono":
-                    type = ResourcesCompat.getFont(parent.getContext(), R.font.chivo_mono_regular);
-                    break;
-                case "roboto":
-                    type = ResourcesCompat.getFont(parent.getContext(), R.font.roboto_condensed_regular);
-                    break;
-                default:
-                    type = Typeface.DEFAULT;
-                    break;
+            Typeface type;
+
+            if (font.equals("mono")) {
+                type = ResourcesCompat.getFont(parent.getContext(), R.font.chivo_mono_regular);
             }
-        } else {
-            type = Typeface.DEFAULT;
+            else {
+                type = ResourcesCompat.getFont(parent.getContext(), R.font.roboto_condensed_regular);
+            }
+
+            textView.setTypeface(type);
         }
-        textView.setTypeface(type);
     }
     private void setTextViewTimer(TextView textView) {
         textView.setVisibility(View.VISIBLE);
@@ -114,24 +105,9 @@ public class TextElement extends PresentationElement implements ViewElement{
    private void create(String font,int fontSize,int color,int width,
                        int height,long timeOnScreen ){
 
-       if(((width<-2)||(width==0))||((height<-2)||(height==0))){
-           IllegalArgumentException e= new IllegalArgumentException
-                   ("Error: width and height parameters are invalid");
-           e.printStackTrace();
-           throw e;
-       }else{
-           this.width=width;
-           this.height=height;
-       }
-       if(fontSize<=0){
-
-           IllegalArgumentException e= new IllegalArgumentException
-                   ("Error: Fontsize must be a positive integer");
-          e.printStackTrace();
-          throw e;
-       }else{
-           this.fontSize=fontSize;
-       }
+       this.width=width;
+       this.height=height;
+       this.fontSize=fontSize;
        this.color=color;
        this.font=font;
        this.timeOnScreen=timeOnScreen;
@@ -140,4 +116,4 @@ public class TextElement extends PresentationElement implements ViewElement{
     public void setContent(String content){
         this.content= content;
     }
-    }
+}

@@ -1,4 +1,6 @@
 package com.penelope.faunafinder.presentation.elements;
+import static com.penelope.faunafinder.presentation.elements.PresentationElement.MATCH_PARENT;
+import static com.penelope.faunafinder.presentation.elements.PresentationElement.WRAP_CONTENT;
 import static com.penelope.faunafinder.presentation.elements.PresentationElement.displayMetrics;
 
 import static org.junit.Assert.assertEquals;
@@ -22,6 +24,8 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Implements;
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -49,8 +53,8 @@ public class TextElementUnitTest{
        int height= 100;
        ArrayList<Integer> testWidths = new ArrayList<>();
        testWidths.add(100);
-       testWidths.add(-1);
-       testWidths.add(-2);
+       testWidths.add(MATCH_PARENT);
+       testWidths.add(WRAP_CONTENT);
 
         ArrayList<Integer> expectedWidths= new ArrayList<>();
         expectedWidths.add(Math.round(100* basicSlide.getCalculatedWidth()/(float) basicSlide.getWidth()));
@@ -71,8 +75,8 @@ public class TextElementUnitTest{
         int width= 100;
         ArrayList<Integer> testHeights= new ArrayList<>();
         testHeights.add(100);
-        testHeights.add(-1);
-        testHeights.add(-2);
+        testHeights.add(MATCH_PARENT);
+        testHeights.add(WRAP_CONTENT);
 
         ArrayList<Integer> expectedHeights= new ArrayList<>();
         expectedHeights.add(Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, displayMetrics)));
@@ -91,20 +95,18 @@ public class TextElementUnitTest{
     @Test
     public void fontIsSetCorrectly() {
        ArrayList<String> fonts= new ArrayList<>();
-       fonts.add("null");
        fonts.add("mono");
        fonts.add("roboto");
 
        ArrayList<Typeface> typefaces= new ArrayList<>();
-       typefaces.add(Typeface.DEFAULT);
        typefaces.add(ResourcesCompat.getFont(parent.getContext(), R.font.chivo_mono_regular));
-       typefaces.add(ResourcesCompat.getFont(parent.getContext(),  R.font.chivo_mono_regular));
+       typefaces.add(ResourcesCompat.getFont(parent.getContext(),  R.font.roboto_condensed_regular));
 
-       for(int i=0;i<1;i++){
+       for(int i=0;i< fonts.size();i++){
            TextElement textElement = new TextElement((String)fonts.get(i), 32, Color.BLACK, 100, 500, 1800, 25, 5000L);
            textElement.setContent("Test input");
            View test= textElement.applyView(parent,(ViewGroup) parent,basicSlide,ELEMENT_ID);
-           assertEquals(((TextView) test).getTypeface().toString(),((Typeface)typefaces.get(i)).toString());
+           assertEquals(((TextView) test).getTypeface(), typefaces.get(i));
        }
     }
     @Test
