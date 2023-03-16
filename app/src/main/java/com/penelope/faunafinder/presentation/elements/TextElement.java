@@ -61,29 +61,26 @@ public class TextElement extends PresentationElement implements ViewElement{
         int h= this.height;
         if (width > 0) {
             mlp.width = Math.round((width * slide.getCalculatedWidth()) / (float) slide.getWidth());
-        } else if (width == -1) {
+        } else if (width == RelativeLayout.LayoutParams.MATCH_PARENT) {
             mlp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
-        } else if (width == -2) {
+        } else if (width ==  RelativeLayout.LayoutParams.WRAP_CONTENT) {
             mlp.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
         } else {
             mlp.width = 0; // May need to ask Guiseppe what happens when width/height =! >0 , -1 or -2
         }
         if (height > 0) {
             mlp.height = dpToPx(height);
-        } else if (height == -1) {
+        } else if (height == RelativeLayout.LayoutParams.MATCH_PARENT) {
             mlp.height = RelativeLayout.LayoutParams.MATCH_PARENT;
-        } else if (height == -2) {
+        } else if (height ==  RelativeLayout.LayoutParams.WRAP_CONTENT) {
             mlp.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
         } else {
             mlp.height = 0;
         }
     }
     private void setTextViewXYParams(Slide slide,ViewGroup.MarginLayoutParams mlp ) {
-        int leftMarg = Math.round((x * slide.getCalculatedWidth()) / (float) slide.getWidth());
-        int rightMarg = leftMarg + mlp.width;
-        int topMarg = dpToPx(y);
-        int bottomMarg = topMarg + mlp.height;
-        mlp.setMargins(leftMarg, topMarg, rightMarg, bottomMarg);
+        mlp.leftMargin= Math.round((x * slide.getCalculatedWidth()) / (float) slide.getWidth());
+        mlp.topMargin= dpToPx(y);
     }
     private void setTextViewFontParams(View parent, TextView textView) {
         textView.setText(content);
@@ -111,7 +108,7 @@ public class TextElement extends PresentationElement implements ViewElement{
         textView.setTypeface(type);
     }
     private void setTextViewTimer(TextView textView) {
-        if (timeOnScreen != 0) {
+        if (timeOnScreen != -1) {
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
