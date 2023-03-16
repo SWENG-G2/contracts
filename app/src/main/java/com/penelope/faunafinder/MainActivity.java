@@ -32,11 +32,11 @@ public class MainActivity extends AppCompatActivity {
         textView.setId(ELEMENT_ID);
         parent.addView(textView);
 
-        TextElement textElement = new TextElement(null, 32, Color.BLACK, 100, 500, 1800, 25, 5000L);
+        TextElement textElement = new TextElement("roboto", 32, Color.BLACK, 100, 500, 1800, 25, 5000L);
         textElement.setContent("Test input");
 
         textElement.applyView(parent, (ViewGroup) parent, basicSlide, ELEMENT_ID);
-
         // The example text element should appear cropped in about half and disappear after 5 seconds
+
     }
 }

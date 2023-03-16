@@ -6,6 +6,7 @@ android {
     namespace 'com.penelope.faunafinder'
     compileSdk 33
 
+
     defaultConfig {
         applicationId "com.penelope.faunafinder"
         minSdk 21
@@ -26,6 +27,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    testOptions{
+        unitTests{
+            includeAndroidResources=true
+        }
+    }
 }
 
 dependencies {
@@ -33,8 +39,12 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'androidx.appcompat:appcompat:1.6.0'
+    testImplementation 'com.google.android.material:material:1.8.0'
+    testImplementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.robolectric:robolectric:4.9'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    testImplementation 'org.robolectric:robolectric:4.9.2'
+
 }
