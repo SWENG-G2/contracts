@@ -61,12 +61,12 @@ public class ImageElement extends PresentationElement implements ViewElement{
 
 
         //account for delay and timeOnScreen
-        if (delay != 0){
+        if (delay != -1){
             imageView.setVisibility(View.INVISIBLE);
             imageView.postDelayed(() -> imageView.setVisibility(View.VISIBLE), delay);
         }
 
-        if (timeOnScreen != 0) {
+        if (timeOnScreen != -1) {
             imageView.postDelayed(() -> imageView.setVisibility(View.INVISIBLE), delay + timeOnScreen);
         }
 
