@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 import com.bumptech.glide.Glide;
 import com.penelope.faunafinder.xml.slide.Slide;
 
+@Getter
 public class ImageElement extends PresentationElement implements ViewElement{
     private final String url;
     private final int width;
