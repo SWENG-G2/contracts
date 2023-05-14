@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
+import lombok.Getter;
 import com.penelope.faunafinder.xml.slide.Slide;
 
 @Getter
