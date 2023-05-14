@@ -15,7 +15,7 @@ import com.penelope.faunafinder.R;
 import com.penelope.faunafinder.xml.slide.Slide;
 
 
-
+@Getter
 public class TextElement extends PresentationElement implements ViewElement{
     private String content;
     private int fontSize;
