@@ -10,12 +10,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
-
+import lombok.Getter;
 import com.penelope.faunafinder.R;
 import com.penelope.faunafinder.xml.slide.Slide;
 
 
-
+@Getter
 public class TextElement extends PresentationElement implements ViewElement{
     private String content;
     private int fontSize;
